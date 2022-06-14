@@ -13,7 +13,7 @@ export const RestaurantSection: FC<{ restaurants: IRestaurant[] | null }> = ({ r
             :
             <Card>
               <Card.Body className='text-center'>
-                <p>No Restraunts were found</p>
+                <p>No restaurants were found</p>
               </Card.Body>
             </Card>
           :
