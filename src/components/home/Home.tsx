@@ -8,7 +8,7 @@ import { LookupRestaurantsArgs } from '../../@types/RealmMethods';
 import { Form } from 'react-bootstrap';
 
 export default function Home() {
-  const [restaurants, setrestaurants] = useState<IRestaurant[] | null>(null);
+  const [restaurants, setRestaurants] = useState<IRestaurant[] | null>(null);
   const [grade, setGrade] = useState<IRestaurantGrade | null>(null);
   const [user, setUser] = useState<Realm.User | null>(null);
   const realmApp = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID });
@@ -37,7 +37,7 @@ export default function Home() {
           limit: 25,
           asJSON: true
         } as LookupRestaurantsArgs);
-        setrestaurants(results)
+        setRestaurants(results)
       }
       catch (err) {
         console.error(err);
@@ -55,7 +55,7 @@ export default function Home() {
           <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <div className="col-lg-4 col-sm-12">
               <Form.Select className="text-center" onChange={(e) =>{
-                setrestaurants(null);
+                setRestaurants(null);
                 setGrade(e.target.value as unknown as IRestaurantGrade|| null)
               }}>
                 <option value="">Show All Grades</option>
