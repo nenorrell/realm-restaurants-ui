@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import * as Realm from 'realm-web';
-import './Home.scss';
 import { RestaurantSection } from '../restaurant-section/RestaurantSection';
 import { IRestaurant, IRestaurantGrade } from '../../@types/restaurant';
 import { LookupRestaurantsArgs } from '../../@types/RealmMethods';
