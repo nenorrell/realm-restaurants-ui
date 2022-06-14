@@ -13,5 +13,5 @@ make run
 Run with Node by running
 
 ```
-npx start
+npm start
 ```
