@@ -12,7 +12,7 @@ export const Restaurant: FC<{ restaurant?: IRestaurant }> = ({ restaurant }) => 
         <Card.Body>
           {
             restaurant ?
-              <Card.Img className="mb-3" variant="top" src={`https://picsum.photos/200?random=${randomNum}`} />
+              <Card.Img className="mb-3" variant="top" src={`https://picsum.photos/seed/${restaurant._id}/200?random=${randomNum}`} />
               :
               <Placeholder animation="glow">
                 <Placeholder lg={12} className="card-img-top mb-3 placeholder-image" />
@@ -24,7 +24,7 @@ export const Restaurant: FC<{ restaurant?: IRestaurant }> = ({ restaurant }) => 
             </strong>
           </p>
           <p>{
-            restaurant?.grades?.[0].grade ? `Grade: ${restaurant?.grades?.[0].grade}`
+            restaurant?.grades?.[0]?.grade ? `Grade: ${restaurant?.grades?.[0]?.grade}`
               :
               <Placeholder animation="glow"><Placeholder lg={6} /></Placeholder>
           }</p>
