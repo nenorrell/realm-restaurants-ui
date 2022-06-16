@@ -2,11 +2,11 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 
 export const Dashboard: FC = () => {
-    const sdk = new ChartsEmbedSDK({ baseUrl: 'https://charts.mongodb.com/charts-testing-grounds-nddfk' });
+    const sdk = new ChartsEmbedSDK({ baseUrl: process.env.REACT_APP_REALM_DASHBOARD_URL });
     const dashboardRef = useRef<HTMLElement>(null);
     const [rendered, setRendered] = useState(false);
     const [mongoDashboard] = useState(sdk.createDashboard({
-        dashboardId: 'c8fb9593-3d7d-4e4e-8613-a344968ffc1a',
+        dashboardId: process.env.REACT_APP_REALM_DASHBOARD_ID,
         heightMode: "scale",
         widthMode: "scale",
         background: "#ffffff"

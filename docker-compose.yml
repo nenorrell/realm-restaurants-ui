@@ -12,6 +12,8 @@ services:
       FAST_REFRESH: "true"
       WDS_SOCKET_PORT: 3002
       REACT_APP_REALM_APP_ID: "realm-tinkering-uvkwf"
+      REACT_APP_REALM_DASHBOARD_URL: "https://charts.mongodb.com/charts-testing-grounds-nddfk"
+      REACT_APP_REALM_DASHBOARD_ID: "c8fb9593-3d7d-4e4e-8613-a344968ffc1a"
 
     ports:
       - "3001:3000"
