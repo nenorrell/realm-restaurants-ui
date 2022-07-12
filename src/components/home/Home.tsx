@@ -6,13 +6,14 @@ import { IRestaurant, IRestaurantGrade } from '../../@types/restaurant';
 import { LookupRestaurantsArgs } from '../../realm/@types/RealmMethods';
 import { Form } from 'react-bootstrap';
 import { debounce } from 'lodash';
-import { lookupRestaurants, searchRestaraunts } from '../../realm/methods';
+import { autocompleteName, lookupRestaurants, searchRestaraunts } from '../../realm/methods';
 
 export default function Home() {
     const [restaurants, setRestaurants] = useState<IRestaurant[] | null>(null);
     const [grade, setGrade] = useState<IRestaurantGrade | "">("");
     const [user, setUser] = useState<Realm.User | null>(null);
     const [search, setSearch] = useState<string>("");
+    const [suggestions, setSuggestions] = useState<IRestaurant[] | null>(null);
 
     const realmApp = new Realm.App({ id: process.env.REACT_APP_REALM_APP_ID });
     const projection: LookupRestaurantsArgs["projection"] = {
@@ -24,10 +25,16 @@ export default function Home() {
         grades: grade ? { $elemMatch: { grade: grade } } : 1
     };
 
+    const doSearch = async (value :string)=>{
+        const results = await searchRestaraunts(user, value);        
+        return setRestaurants(results);
+    }
+
     const debouncedSave = useCallback(
-        debounce(async value => {
-            const results = await searchRestaraunts(user, value);
-            return setRestaurants(results);
+        debounce(async (value :string) => {
+            const autocomplete = await autocompleteName(user, value);
+            setSuggestions(autocomplete);
+            doSearch(value);
         }, 1000),
         [user],
     );
@@ -55,6 +62,9 @@ export default function Home() {
                     const results = await lookupRestaurants({ user: user, projection, grade });
                     setRestaurants(results);
                 }
+                if(suggestions){
+                    setSuggestions(null);
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -70,13 +80,36 @@ export default function Home() {
                     <p className="lead mb-3">Either search restaurants by name or filter by grade</p>
                     <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
                         <div className="col-lg-8 col-sm-12">
-                            <Form.Control type="text" placeholder="Search for a restaurant by name..." onChange={handleInput} value={search} />
+                            <Form.Control
+                                type="text"
+                                placeholder="Search for a restaurant by name..."
+                                onChange={handleInput}
+                                value={search}
+                            />
+                                {
+                                    suggestions ? 
+                                    <Form.Select htmlSize={suggestions.length < 5 ? suggestions.length : 5}>
+                                        {suggestions.map((restaurant, i) =>
+                                            i < 5?
+                                                <option key={i} value={restaurant.name}
+                                                onClick={e => {
+                                                    setSearch(restaurant.name);
+                                                    doSearch(restaurant.name);
+                                                    setSuggestions(null);
+                                                }}
+                                                >{restaurant.name}</option>
+                                            : null
+                                        )}
+                                    </Form.Select>
+                                    : null
+                                }
                         </div>
                         <div className="col-lg-4 col-sm-12">
                             <Form.Select className="text-center" onChange={(e) => {
                                 setRestaurants(null);
                                 setGrade(e.target.value as unknown as IRestaurantGrade || null)
                                 setSearch("");
+                                setSuggestions(null);
                             }} value={grade as string}>
                                 <option value="">Show All Grades</option>
                                 <option value="A">A Grades</option>

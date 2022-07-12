@@ -1,6 +1,19 @@
 import { LookupRestaurantsArgs, SearchRestarauntsArgs } from "./@types/RealmMethods";
 import { IRestaurant } from "../@types/restaurant";
 
+export async function autocompleteName(user: Realm.User | null, value: string) :Promise<IRestaurant[]> {
+    try {
+        return await user?.functions.autocompleteRestaurantName({
+            limit: 25,
+            asJSON: true,
+            searchTerm: value
+        } as SearchRestarauntsArgs);
+    }
+    catch(err) {
+        console.error(err);
+        throw err
+    }
+}
 export async function searchRestaraunts(user: Realm.User | null, value: string) :Promise<IRestaurant[]> {
     try {
         return await user?.functions.searchRestaurants({
